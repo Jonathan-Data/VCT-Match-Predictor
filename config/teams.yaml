@@ -1,0 +1,123 @@
+teams:
+  paper_rex:
+    name: "Paper Rex"
+    region: "APAC"
+    vlr_url: "https://www.vlr.gg/team/624/paper-rex"
+    vlr_id: 624
+  
+  rex_regum_qeon:
+    name: "Rex Regum Qeon"
+    region: "APAC"
+    vlr_url: "https://www.vlr.gg/team/878/rex-regum-qeon"
+    vlr_id: 878
+  
+  t1:
+    name: "T1"
+    region: "APAC"
+    vlr_url: "https://www.vlr.gg/team/14/t1"
+    vlr_id: 14
+  
+  drx:
+    name: "DRX"
+    region: "APAC"
+    vlr_url: "https://www.vlr.gg/team/8185/drx"
+    vlr_id: 8185
+  
+  team_liquid:
+    name: "Team Liquid"
+    region: "EMEA"
+    vlr_url: "https://www.vlr.gg/team/474/team-liquid"
+    vlr_id: 474
+  
+  giantx:
+    name: "GIANTX"
+    region: "EMEA"
+    vlr_url: "https://www.vlr.gg/team/14419/giantx"
+    vlr_id: 14419
+  
+  fnatic:
+    name: "Fnatic"
+    region: "EMEA"
+    vlr_url: "https://www.vlr.gg/team/2593/fnatic"
+    vlr_id: 2593
+  
+  team_heretics:
+    name: "Team Heretics"
+    region: "EMEA"
+    vlr_url: "https://www.vlr.gg/team/1001/team-heretics"
+    vlr_id: 1001
+  
+  bilibili_gaming:
+    name: "Bilibili Gaming"
+    region: "CN"
+    vlr_url: "https://www.vlr.gg/team/12010/bilibili-gaming"
+    vlr_id: 12010
+  
+  dragon_ranger_gaming:
+    name: "Dragon Ranger Gaming"
+    region: "CN"
+    vlr_url: "https://www.vlr.gg/team/11981/dragon-ranger-gaming"
+    vlr_id: 11981
+  
+  edward_gaming:
+    name: "Edward Gaming"
+    region: "CN"
+    vlr_url: "https://www.vlr.gg/team/1120/edward-gaming"
+    vlr_id: 1120
+  
+  xi_lai_gaming:
+    name: "Xi Lai Gaming"
+    region: "CN"
+    vlr_url: "https://www.vlr.gg/team/13581/xi-lai-gaming"
+    vlr_id: 13581
+  
+  g2_esports:
+    name: "G2 Esports"
+    region: "Americas"
+    vlr_url: "https://www.vlr.gg/team/11058/g2-esports"
+    vlr_id: 11058
+  
+  nrg:
+    name: "NRG"
+    region: "Americas"
+    vlr_url: "https://www.vlr.gg/team/1034/nrg"
+    vlr_id: 1034
+  
+  sentinels:
+    name: "Sentinels"
+    region: "Americas"
+    vlr_url: "https://www.vlr.gg/team/2/sentinels"
+    vlr_id: 2
+  
+  mibr:
+    name: "MIBR"
+    region: "Americas"
+    vlr_url: "https://www.vlr.gg/team/7386/mibr"
+    vlr_id: 7386
+
+kaggle_datasets:
+  - name: "valorant-masters-bangkok-2025"
+    url: "https://www.kaggle.com/datasets/piyush86kumar/valorant-masters-bangkok-2025/data"
+    dataset_id: "piyush86kumar/valorant-masters-bangkok-2025"
+  
+  - name: "valorant-stage-2-2025-all-regions"
+    url: "https://www.kaggle.com/datasets/piyush86kumar/valorant-stage-2-2025-all-regions"
+    dataset_id: "piyush86kumar/valorant-stage-2-2025-all-regions"
+  
+  - name: "valorant-stage-1-2025-all-regions"
+    url: "https://www.kaggle.com/datasets/piyush86kumar/valorant-stage-1-2025-all-regions"
+    dataset_id: "piyush86kumar/valorant-stage-1-2025-all-regions"
+  
+  - name: "valorant-masters-toronto-2025"
+    url: "https://www.kaggle.com/datasets/piyush86kumar/valorant-masters-toronto-2025"
+    dataset_id: "piyush86kumar/valorant-masters-toronto-2025"
+  
+  - name: "valorant-kickoff-2025-all-regions"
+    url: "https://www.kaggle.com/datasets/piyush86kumar/valorant-kickoff-2025-all-regions"
+    dataset_id: "piyush86kumar/valorant-kickoff-2025-all-regions"
+
+regions:
+  - "APAC"
+  - "EMEA" 
+  - "CN"
+  - "Americas"
