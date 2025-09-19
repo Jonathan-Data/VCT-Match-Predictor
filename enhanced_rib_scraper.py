@@ -590,6 +590,45 @@ class EnhancedRibScraper:
         self.logger.info("🔧 Enhanced RIB scraper closed")
 
 
+def scrape_team_data(team_name: str, headless: bool = True) -> Optional[Dict[str, Any]]:
+    """
+    Convenience function to scrape team data.
+    Returns a dictionary representation of the team data.
+    """
+    scraper = None
+    try:
+        scraper = EnhancedRibScraper(headless=headless)
+        team_data = scraper.scrape_team_data(team_name)
+        
+        if team_data:
+            return {
+                'success': True,
+                'team_name': team_data.team_name,
+                'data': asdict(team_data),
+                'scraping_method': team_data.scraping_method,
+                'confidence': team_data.data_confidence
+            }
+        else:
+            return {
+                'success': False,
+                'team_name': team_name,
+                'error': 'Failed to scrape team data',
+                'scraping_method': 'failed'
+            }
+    
+    except Exception as e:
+        return {
+            'success': False,
+            'team_name': team_name,
+            'error': str(e),
+            'scraping_method': 'error'
+        }
+    
+    finally:
+        if scraper:
+            scraper.close()
+
+
 def main():
     """Test the enhanced scraper."""
     print("🔧 Enhanced RIB.gg Scraper Test")

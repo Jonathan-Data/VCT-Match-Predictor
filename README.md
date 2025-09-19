@@ -24,7 +24,7 @@ python3 run_gui.py
 ```
 or
 ```bash
-python3 vct_predictor_gui.py
+python3 vct_gui.py
 ```
 
 ### 3. Basic Usage
@@ -37,7 +37,7 @@ python3 vct_predictor_gui.py
 ## System Components
 
 ### Core Files
-- `vct_predictor_gui.py` - Main GUI application with all functionality
+- `vct_gui.py` - Main GUI application (works reliably on macOS)
 - `run_gui.py` - Simple launcher script
 - `enhanced_rib_scraper.py` - Production-ready data scraper with fallback
 - `performance_monitor.py` - Real-world accuracy tracking system

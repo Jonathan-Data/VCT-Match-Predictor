@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent))
 
 try:
-    from vct_predictor_gui import main
+    from vct_gui import main
     
     if __name__ == "__main__":
         print("Starting VCT Prediction System GUI...")
