@@ -96,6 +96,11 @@ teams:
     vlr_id: 7386
 
 kaggle_datasets:
+  - name: "valorant-champion-tour-2021-2023-data"
+    url: "https://www.kaggle.com/datasets/ryanluong1/valorant-champion-tour-2021-2023-data"
+    dataset_id: "ryanluong1/valorant-champion-tour-2021-2023-data"
+    description: "Comprehensive historical VCT data from 2021-2023 including map stats, team performance, and agent meta"
+  
   - name: "valorant-masters-bangkok-2025"
     url: "https://www.kaggle.com/datasets/piyush86kumar/valorant-masters-bangkok-2025/data"
     dataset_id: "piyush86kumar/valorant-masters-bangkok-2025"

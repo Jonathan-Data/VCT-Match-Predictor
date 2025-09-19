@@ -85,7 +85,7 @@ class VCTMatchPredictor:
         
         return RandomForestClassifier(**default_params)
     
-    def create_xgboost(self, **kwargs) -> Optional[xgb.XGBClassifier]:
+    def create_xgboost(self, **kwargs) -> Optional[Any]:
         """Create an XGBoost model with optimized parameters."""
         if not XGBOOST_AVAILABLE:
             logger.warning("XGBoost not available, skipping")
@@ -103,6 +103,8 @@ class VCTMatchPredictor:
         }
         default_params.update(kwargs)
         
+        # Import xgb here since it's available
+        import xgboost as xgb
         return xgb.XGBClassifier(**default_params)
     
     def create_logistic_regression(self, **kwargs) -> LogisticRegression:
@@ -128,11 +130,17 @@ class VCTMatchPredictor:
         
         return SVC(**default_params)
     
-    def create_neural_network(self, input_dim: int, **kwargs) -> Optional[Sequential]:
+    def create_neural_network(self, input_dim: int, **kwargs) -> Optional[Any]:
         """Create a neural network model."""
         if not TENSORFLOW_AVAILABLE:
             logger.warning("TensorFlow not available, skipping neural network")
             return None
+        
+        # Import TensorFlow here since it's available
+        import tensorflow as tf
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
+        from tensorflow.keras.optimizers import Adam
         
         model = Sequential([
             Dense(128, activation='relu', input_dim=input_dim),
@@ -475,4 +483,40 @@ class VCTMatchPredictor:
         
         print("\n" + "="*60)
 
-def main():\n    \"\"\"Main function to demonstrate model training.\"\"\"\n    # This is a demo function - in practice, you'd load your processed data\n    print(\"VCT Match Predictor - Model Training Demo\")\n    \n    # Create dummy data for demonstration\n    np.random.seed(42)\n    n_samples = 1000\n    n_features = 10\n    \n    X = pd.DataFrame(np.random.randn(n_samples, n_features), \n                     columns=[f'feature_{i}' for i in range(n_features)])\n    y = pd.Series(np.random.randint(0, 2, n_samples), name='winner')\n    \n    # Split data\n    from sklearn.model_selection import train_test_split\n    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n    \n    # Initialize predictor\n    predictor = VCTMatchPredictor()\n    \n    # Train models\n    performances = predictor.train_all_models(X_train, y_train, X_test, y_test)\n    \n    # Create ensemble\n    predictor.create_ensemble_model(X_train, y_train)\n    \n    # Print results\n    predictor.print_performance_summary()\n    \n    # Save models\n    predictor.save_models()\n    \n    print(\"\\nModel training completed!\")\n\nif __name__ == \"__main__\":\n    main()
+def main():
+    """Main function to demonstrate model training."""
+    # This is a demo function - in practice, you'd load your processed data
+    print("VCT Match Predictor - Model Training Demo")
+    
+    # Create dummy data for demonstration
+    np.random.seed(42)
+    n_samples = 1000
+    n_features = 10
+    
+    X = pd.DataFrame(np.random.randn(n_samples, n_features), 
+                     columns=[f'feature_{i}' for i in range(n_features)])
+    y = pd.Series(np.random.randint(0, 2, n_samples), name='winner')
+    
+    # Split data
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Initialize predictor
+    predictor = VCTMatchPredictor()
+    
+    # Train models
+    performances = predictor.train_all_models(X_train, y_train, X_test, y_test)
+    
+    # Create ensemble
+    predictor.create_ensemble_model(X_train, y_train)
+    
+    # Print results
+    predictor.print_performance_summary()
+    
+    # Save models
+    predictor.save_models()
+    
+    print("\nModel training completed!")
+
+if __name__ == "__main__":
+    main()

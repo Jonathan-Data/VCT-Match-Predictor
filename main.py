@@ -269,10 +269,26 @@ def main():
     # Status command
     subparsers.add_parser('status', help='Show system status')
     
+    # GUI command
+    subparsers.add_parser('gui', help='Launch graphical user interface')
+    
     args = parser.parse_args()
     
     if not args.command:
         parser.print_help()
+        return
+    
+    if args.command == 'gui':
+        try:
+            # Import and launch GUI
+            from gui import VCTPredictorGUI
+            app = VCTPredictorGUI()
+            app.run()
+        except ImportError as e:
+            print(f"❌ Error: GUI dependencies not available: {e}")
+            print("Please ensure tkinter is installed and gui.py is in the project directory.")
+        except Exception as e:
+            print(f"❌ Error launching GUI: {e}")
         return
     
     # Initialize predictor
