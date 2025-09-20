@@ -138,51 +138,66 @@ class VCTPredictionGUI:
     
     def create_manual_prediction_tab(self, parent):
         """Create manual prediction interface (original prediction section)"""
+        # Configure the parent frame to expand
         parent.columnconfigure(1, weight=1)
         parent.columnconfigure(3, weight=1)
+        parent.rowconfigure(6, weight=1)  # Add weight to push content up
+        
+        # Team selection section
+        team_frame = ttk.LabelFrame(parent, text="Team Selection", padding="10")
+        team_frame.grid(row=0, column=0, columnspan=5, sticky=(tk.W, tk.E), pady=(0, 10))
+        team_frame.columnconfigure(1, weight=1)
+        team_frame.columnconfigure(3, weight=1)
         
         # Team 1 selection
-        ttk.Label(parent, text="Team 1:").grid(row=0, column=0, sticky=tk.W, padx=(0, 5))
+        ttk.Label(team_frame, text="Team 1:").grid(row=0, column=0, sticky=tk.W, padx=(0, 5))
         self.team1_var = tk.StringVar()
-        self.team1_combo = ttk.Combobox(parent, textvariable=self.team1_var, 
+        self.team1_combo = ttk.Combobox(team_frame, textvariable=self.team1_var, 
                                        state="readonly", width=25)
         self.team1_combo.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=(0, 10))
         
         # VS label
-        ttk.Label(parent, text="VS", font=('Arial', 12, 'bold')).grid(row=0, column=2, padx=10)
+        ttk.Label(team_frame, text="VS", font=('Arial', 12, 'bold')).grid(row=0, column=2, padx=10)
         
         # Team 2 selection
-        ttk.Label(parent, text="Team 2:").grid(row=0, column=3, sticky=tk.W, padx=(10, 5))
+        ttk.Label(team_frame, text="Team 2:").grid(row=0, column=3, sticky=tk.W, padx=(10, 5))
         self.team2_var = tk.StringVar()
-        self.team2_combo = ttk.Combobox(parent, textvariable=self.team2_var, 
+        self.team2_combo = ttk.Combobox(team_frame, textvariable=self.team2_var, 
                                        state="readonly", width=25)
         self.team2_combo.grid(row=0, column=4, sticky=(tk.W, tk.E))
         
-        # VLR ID input option
-        separator = ttk.Separator(parent, orient='horizontal')
-        separator.grid(row=1, column=0, columnspan=5, sticky=(tk.W, tk.E), pady=(10, 5))
+        # VLR ID input section
+        id_frame = ttk.LabelFrame(parent, text="Direct VLR ID Input (Alternative)", padding="10")
+        id_frame.grid(row=1, column=0, columnspan=5, sticky=(tk.W, tk.E), pady=(0, 10))
+        id_frame.columnconfigure(1, weight=1)
+        id_frame.columnconfigure(3, weight=1)
         
-        ttk.Label(parent, text="Or use VLR IDs directly:", 
-                 font=('Arial', 9, 'italic')).grid(row=2, column=0, columnspan=5, pady=(0, 5))
-        
-        # VLR ID inputs
-        vlr_frame = ttk.Frame(parent)
-        vlr_frame.grid(row=3, column=0, columnspan=5, sticky=(tk.W, tk.E))
-        vlr_frame.columnconfigure(1, weight=1)
-        vlr_frame.columnconfigure(4, weight=1)
-        
-        ttk.Label(vlr_frame, text="Team 1 ID:").grid(row=0, column=0, sticky=tk.W, padx=(0, 5))
+        ttk.Label(id_frame, text="Team 1 ID:").grid(row=0, column=0, sticky=tk.W, padx=(0, 5))
         self.team1_id_var = tk.StringVar()
-        ttk.Entry(vlr_frame, textvariable=self.team1_id_var, width=10).grid(row=0, column=1, sticky=tk.W)
+        ttk.Entry(id_frame, textvariable=self.team1_id_var, width=15).grid(row=0, column=1, sticky=tk.W, padx=(0, 20))
         
-        ttk.Label(vlr_frame, text="Team 2 ID:").grid(row=0, column=3, sticky=tk.W, padx=(20, 5))
+        ttk.Label(id_frame, text="Team 2 ID:").grid(row=0, column=2, sticky=tk.W, padx=(0, 5))
         self.team2_id_var = tk.StringVar()
-        ttk.Entry(vlr_frame, textvariable=self.team2_id_var, width=10).grid(row=0, column=4, sticky=tk.W)
+        ttk.Entry(id_frame, textvariable=self.team2_id_var, width=15).grid(row=0, column=3, sticky=tk.W)
         
-        # Predict button
-        self.predict_button = ttk.Button(parent, text="Predict Match", 
-                                        command=self.predict_match, width=20)
-        self.predict_button.grid(row=4, column=0, columnspan=5, pady=(15, 0))
+        # Predict button - Make it more prominent
+        button_frame = ttk.Frame(parent)
+        button_frame.grid(row=2, column=0, columnspan=5, pady=20)
+        
+        self.predict_button = ttk.Button(button_frame, text="🔮 Predict Match", 
+                                        command=self.predict_match, width=25)
+        self.predict_button.pack()
+        
+        # Add instructions
+        instructions = ttk.Label(parent, text="Select two teams from the dropdowns above, or enter VLR IDs directly, then click Predict.", 
+                               font=('Arial', 9), foreground="gray")
+        instructions.grid(row=3, column=0, columnspan=5, pady=(10, 0))
+        
+        # Add status indicator for manual predictions
+        self.manual_status_var = tk.StringVar(value="Ready for manual prediction")
+        self.manual_status_label = ttk.Label(parent, textvariable=self.manual_status_var, 
+                                           font=('Arial', 9), foreground="blue")
+        self.manual_status_label.grid(row=4, column=0, columnspan=5, pady=5)
     
     def create_tournament_tab(self, parent):
         """Create tournament matches interface"""
@@ -485,6 +500,7 @@ class VCTPredictionGUI:
         def predict_thread():
             self.is_predicting = True
             self.predict_button.configure(state='disabled')
+            self.manual_status_var.set(f"Predicting {team1_name} vs {team2_name}...")
             self.set_status(f"Predicting {team1_name} vs {team2_name}...")
             
             try:
@@ -496,17 +512,23 @@ class VCTPredictionGUI:
                 
                 if prediction:
                     self.display_prediction_result(prediction)
+                    self.manual_status_var.set("Prediction completed successfully")
                     self.set_status("Prediction completed")
                 else:
                     self.log_message("Prediction failed - no result returned")
+                    self.manual_status_var.set("Prediction failed")
                     self.set_status("Prediction failed")
                 
             except Exception as e:
                 self.log_message(f"Prediction error: {str(e)}")
+                self.manual_status_var.set(f"Error: {str(e)}")
                 self.set_status("Prediction error")
             finally:
                 self.is_predicting = False
                 self.predict_button.configure(state='normal')
+                if hasattr(self, 'manual_status_var'):
+                    if self.manual_status_var.get().startswith("Predicting"):
+                        self.manual_status_var.set("Ready for manual prediction")
         
         threading.Thread(target=predict_thread, daemon=True).start()
     
