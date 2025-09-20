@@ -608,7 +608,7 @@ Win Probabilities:
                     performance_text += f"  AUC: {metrics.get('auc', 0):.3f}\n"
             
             performance_text += f"\nModel Status: {'Trained' if self.model_trained else 'Not Trained'}\n"
-            performance_text += f"Model Type: {self.model_type_var.get()}\n"
+            performance_text += f"Model Type: Super VCT Predictor (7-Model Ensemble)\n"
             
         except Exception as e:
             performance_text += f"Error retrieving performance metrics: {str(e)}\n"
@@ -622,7 +622,7 @@ Win Probabilities:
         
         # Model status
         status_text += f"Model Status: {'Trained' if self.model_trained else 'Not Trained'}\n"
-        status_text += f"Model Type: {self.model_type_var.get()}\n"
+        status_text += f"Model Type: Super VCT Predictor (7-Model Ensemble)\n"
         status_text += f"Teams Loaded: {len(self.teams_config.get('teams', {}))}\n"
         
         # System info
