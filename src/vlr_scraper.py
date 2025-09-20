@@ -106,20 +106,41 @@ class TeamNameProcessor:
         re.compile(r'\belimination\s+match\b', re.IGNORECASE),
         re.compile(r'\bdecider\s+match\b', re.IGNORECASE),
         re.compile(r'\badvanced\b', re.IGNORECASE),
+        re.compile(r'^(elimination|decider|winner|loser)\s+', re.IGNORECASE),  # Stage prefixes
+        re.compile(r'\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}\b', re.IGNORECASE),  # Dates in team names
+        re.compile(r'\d+\s*$', re.IGNORECASE),  # Names ending with numbers
     ]
     
     CLEANING_PATTERNS = [
+        # Country/region removal
         (re.compile(r'\[[A-Z]{2,4}\]\s*'), ''),                    # [US] format
         (re.compile(r'\([A-Z]{2,4}\)\s*'), ''),                    # (US) format
         (re.compile(r'^[A-Z]{2,4}\s+'), ''),                       # US Team format
-        (re.compile(r'\s*\d{1,2}:\d{2}\s*(AM|PM)?', re.I), ''),   # Times
-        (re.compile(r'\s*\d+[-–—]\d+'), ''),                       # Scores
-        (re.compile(r'\s*\(\d+[-–—]\d+\)'), ''),                   # (2-1) format
-        (re.compile(r'\s*\d{1,2}/\d{1,2}'), ''),                  # Dates
+        (re.compile(r'\b(United States|China|Korea|South Korea|Japan|Brazil|Singapore|United Kingdom|Germany|Thailand|Philippines|Indonesia|Malaysia|Vietnam|Australia)\b', re.I), ''),  # Country names
+        (re.compile(r'\b(USA|EMEA|APAC|Europe|Asia|NA|EU|BR|KR|JP|SG|GB|UK|DE|FR|TH|PH|ID|MY|VN|AU)\b', re.I), ''),  # Region/country codes
+        
+        # Numeric suffixes and prefixes
+        (re.compile(r'\d+$'), ''),                                 # Trailing numbers
+        (re.compile(r'^\d+\s*'), ''),                              # Leading numbers
         (re.compile(r'\s*#\d+'), ''),                              # Seed numbers
+        
+        # Date and time patterns
+        (re.compile(r'\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}\b', re.I), ''),  # Dates
+        (re.compile(r'\s*\d{1,2}/\d{1,2}(/\d{2,4})?'), ''),        # Date formats
+        (re.compile(r'\s*\d{1,2}:\d{2}\s*(AM|PM)?', re.I), ''),   # Times
         (re.compile(r'\s*\d+d\s*\d*h?'), ''),                     # Time durations
         (re.compile(r'\s*\d+h\s*\d*m?'), ''),                     # Time durations
         (re.compile(r'\s*\d+m'), ''),                              # Minutes
+        
+        # Tournament stage prefixes/suffixes
+        (re.compile(r'^(Elimination|Decider|Winner|Loser|Upper|Lower)\s+', re.I), ''),  # Stage prefixes
+        (re.compile(r'\s+(Elimination|Decider|Winner|Loser|Upper|Lower)$', re.I), ''),  # Stage suffixes
+        
+        # Score and bracket information
+        (re.compile(r'\s*\d+[-–—]\d+'), ''),                       # Scores
+        (re.compile(r'\s*\(\d+[-–—]\d+\)'), ''),                   # (2-1) format
+        
+        # Punctuation and spacing
         (re.compile(r'[•·‧‹›\-–—]', re.I), ' '),                  # Replace punctuation
         (re.compile(r'\s+'), ' '),                                 # Normalize whitespace
     ]
@@ -149,7 +170,13 @@ class TeamNameProcessor:
         'tbd', 'vs', 'v', 'winner', 'loser', 'qualified', 'eliminated', 'bye',
         'match', 'game', 'stage', 'group', 'playoffs', 'final', 'semifinal',
         'quarterfinal', 'upper', 'lower', 'bracket', 'usa', 'br', 'kr', 'jp',
-        'eu', 'na', 'emea', 'apac', 'asia', 'europe', 'china', 'korea'
+        'eu', 'na', 'emea', 'apac', 'asia', 'europe', 'china', 'korea',
+        'elimination', 'decider', 'united states', 'south korea', 'japan',
+        'brazil', 'singapore', 'united kingdom', 'germany', 'thailand',
+        'philippines', 'indonesia', 'malaysia', 'vietnam', 'australia',
+        'sentinelsunited states', 'edward gamingchina', 'paper rex2',
+        'bilibili gaming0', 'team liquid0', 'g2 esports0', 'sentinels1',
+        'evry', 'courcouronnes'  # Known invalid entries from scraping
     }
     
     COUNTRY_CODE_MAP = {
@@ -262,6 +289,25 @@ class TeamNameProcessor:
         
         # Check explicitly invalid terms first
         if team_lower in cls.INVALID_TERMS:
+            return False
+            
+        # Additional checks for problematic patterns
+        # Reject names ending with digits
+        if re.search(r'\d+$', team_name.strip()):
+            return False
+            
+        # Reject names with country concatenations
+        country_concat_patterns = [
+            r'\b(sentinels|paper rex|bilibili gaming|edward gaming|g2 esports|team liquid)(united states|china|korea|japan|brazil)\b',
+            r'\b\w+(usa|china|korea|japan|brazil|emea|apac)$'
+        ]
+        
+        for pattern in country_concat_patterns:
+            if re.search(pattern, team_lower, re.IGNORECASE):
+                return False
+                
+        # Reject names starting with stage/date information
+        if re.search(r'^(elimination|decider|sep|oct|nov|dec|jan|feb|mar|apr|may|jun|jul|aug)\s+', team_lower):
             return False
         
         # Direct check for known teams
