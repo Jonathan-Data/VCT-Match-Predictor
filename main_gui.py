@@ -722,6 +722,11 @@ Win Probabilities:
     def _load_super_model(self, model_file, metadata_file):
         """Load the Super VCT Predictor model"""
         try:
+            # Ensure models path is available for unpickling
+            models_path = Path(__file__).parent / "src" / "models"
+            if str(models_path) not in sys.path:
+                sys.path.append(str(models_path))
+            
             # Load model metadata
             if metadata_file.exists():
                 with open(metadata_file, 'r') as f:
@@ -770,6 +775,11 @@ Win Probabilities:
     def _load_old_model(self, model_file, metadata_file):
         """Load the old robust model (fallback)"""
         try:
+            # Ensure models path is available for unpickling  
+            models_path = Path(__file__).parent / "src" / "models"
+            if str(models_path) not in sys.path:
+                sys.path.append(str(models_path))
+            
             # Load model metadata
             if metadata_file.exists():
                 with open(metadata_file, 'r') as f:
