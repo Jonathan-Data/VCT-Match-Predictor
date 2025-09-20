@@ -112,6 +112,11 @@ class TeamNameProcessor:
     ]
     
     CLEANING_PATTERNS = [
+        # Character artifacts and prefixes (more specific)
+        (re.compile(r'^[a-z]\s+(?=[A-Z])', re.I), ''),            # Single char + space before capital: 'h Rex' -> 'Rex'
+        (re.compile(r'^d(?=Team|Xi)', re.I), ''),                 # Specific 'd' prefix: 'dTeam' -> 'Team'
+        (re.compile(r'^h\s+(?=Rex|Dragon)', re.I), ''),           # Specific 'h ' prefix: 'h Rex' -> 'Rex'
+        
         # Country/region removal
         (re.compile(r'\[[A-Z]{2,4}\]\s*'), ''),                    # [US] format
         (re.compile(r'\([A-Z]{2,4}\)\s*'), ''),                    # (US) format
@@ -176,7 +181,8 @@ class TeamNameProcessor:
         'philippines', 'indonesia', 'malaysia', 'vietnam', 'australia',
         'sentinelsunited states', 'edward gamingchina', 'paper rex2',
         'bilibili gaming0', 'team liquid0', 'g2 esports0', 'sentinels1',
-        'evry', 'courcouronnes'  # Known invalid entries from scraping
+        'evry', 'courcouronnes',  # Known invalid entries from scraping
+        'h rex regum qeon', 'h dragon ranger gaming', 'dteam liquid', 'dxi lai gaming'  # Character prefix variants
     }
     
     COUNTRY_CODE_MAP = {
@@ -203,14 +209,18 @@ class TeamNameProcessor:
         original = team_name.strip()
         full_text_lower = original.lower()
         
-        # Step 1: Immediate rejection for problematic patterns
+        # Step 1: Check for character prefix artifacts first
+        if re.search(r'^[a-z]\s+[A-Z]', original) or re.search(r'^[a-z][A-Z]', original):
+            return ""
+        
+        # Step 2: Immediate rejection for problematic patterns
         if cls._should_reject_immediately(full_text_lower, original):
             return ""
         
-        # Step 2: Clean the team name
+        # Step 3: Clean the team name
         cleaned = cls._apply_cleaning_patterns(team_name)
         
-        # Step 3: Final validation
+        # Step 4: Final validation
         if not cleaned or len(cleaned.strip()) < 2:
             return ""
         
@@ -308,6 +318,10 @@ class TeamNameProcessor:
                 
         # Reject names starting with stage/date information
         if re.search(r'^(elimination|decider|sep|oct|nov|dec|jan|feb|mar|apr|may|jun|jul|aug)\s+', team_lower):
+            return False
+            
+        # Reject names with character prefixes (artifacts from scraping)
+        if re.search(r'^[a-z]\s+[A-Z]', team_name) or re.search(r'^[a-z][A-Z]', team_name):
             return False
         
         # Direct check for known teams

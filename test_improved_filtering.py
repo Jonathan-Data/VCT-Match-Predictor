@@ -23,7 +23,12 @@ problematic_names = [
     "Sep 19 Decider DRX",
     "Elimination G2 Esports",
     "Evry",
-    "Courcouronnes"
+    "Courcouronnes",
+    # New problematic names from latest output
+    "h Rex Regum Qeon",
+    "h Dragon Ranger Gaming", 
+    "dTeam Liquid",
+    "dXi Lai Gaming"
 ]
 
 # Test valid team names that should pass
