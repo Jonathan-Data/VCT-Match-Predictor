@@ -206,7 +206,7 @@ VCT-Match-Predictor/
 ├── src/automated_data_updater.py      # Scheduled updates
 ├── src/performance_monitor.py         # Accuracy tracking
 ├── src/production_deployment.py       # System orchestration
-└── PRODUCTION_SETUP_GUIDE.md      # This guide
+└── docs/PRODUCTION_SETUP_GUIDE.md      # This guide
 ```
 
 ## 🔧 Configuration Files
