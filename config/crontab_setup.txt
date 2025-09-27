@@ -1,0 +1,10 @@
+# VCT Prediction System Cron Jobs
+
+# Run full pipeline every 6 hours
+0 */6 * * * cd /Users/jolauwer/Documents/VCT-Match-Predictor && /usr/bin/python3 src/production_deployment.py --pipeline >> /Users/jolauwer/Documents/VCT-Match-Predictor/logs/cron.log 2>&1
+
+# Run data updates every 8 hours (offset)
+30 */8 * * * cd /Users/jolauwer/Documents/VCT-Match-Predictor && /usr/bin/python3 src/production_deployment.py --data-only >> /Users/jolauwer/Documents/VCT-Match-Predictor/logs/cron.log 2>&1
+
+# Run performance monitoring every 12 hours
+15 */12 * * * cd /Users/jolauwer/Documents/VCT-Match-Predictor && /usr/bin/python3 src/production_deployment.py --monitor-only >> /Users/jolauwer/Documents/VCT-Match-Predictor/logs/cron.log 2>&1

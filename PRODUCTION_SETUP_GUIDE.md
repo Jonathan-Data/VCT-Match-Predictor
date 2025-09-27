@@ -9,10 +9,10 @@ This guide walks you through setting up the complete VCT prediction system for a
 Your VCT prediction system consists of these components:
 
 ### ✅ Available Components
-- **Enhanced Rib Scraper** (`enhanced_rib_scraper.py`) - Production-ready data collection
-- **Performance Monitor** (`performance_monitor.py`) - Real-world accuracy tracking  
-- **Automated Data Updater** (`automated_data_updater.py`) - Scheduled data updates
-- **Production Deployment** (`production_deployment.py`) - System orchestration
+- **Enhanced Rib Scraper** (`src/data_collection/rib_scraper.py`) - Production-ready data collection
+- **Performance Monitor** (`src/performance_monitor.py`) - Real-world accuracy tracking  
+- **Automated Data Updater** (`src/automated_data_updater.py`) - Scheduled data updates
+- **Production Deployment** (`src/production_deployment.py`) - System orchestration
 
 ### 🔧 Missing Components (Optional)
 - **Live Predictor** - Can be recreated from existing model files
@@ -22,28 +22,28 @@ Your VCT prediction system consists of these components:
 
 ### 1. Install Dependencies
 ```bash
-cd /Users/jolauwer/Documents/valorant-vct-predictor-2025
+cd /Users/jolauwer/Documents/VCT-Match-Predictor
 pip3 install schedule pandas numpy scikit-learn requests beautifulsoup4 selenium joblib
 ```
 
 ### 2. Check System Status
 ```bash
-python3 production_deployment.py --status
+python3 src/production_deployment.py --status
 ```
 
 ### 3. Test Data Collection
 ```bash
-python3 production_deployment.py --data-only
+python3 src/production_deployment.py --data-only
 ```
 
 ### 4. Setup Automated Scheduling
 ```bash
-python3 production_deployment.py --setup-cron
+python3 src/production_deployment.py --setup-cron
 ```
 
 ## 📊 Automated Data Updates
 
-The `automated_data_updater.py` provides:
+The `src/automated_data_updater.py` provides:
 
 ### Features
 - **Multi-source Updates**: VLR.gg and rib.gg data collection
@@ -108,11 +108,11 @@ The performance monitoring system provides:
 ### Usage
 ```bash
 # Check current performance
-python3 performance_monitor.py
+python3 src/performance_monitor.py
 
 # Add match results programmatically
 python3 -c "
-from performance_monitor import PerformanceMonitor, MatchResult
+from src.performance_monitor import PerformanceMonitor, MatchResult
 monitor = PerformanceMonitor()
 result = MatchResult('match_001', 'Team1', 'Team2', 'Team1', '2-1', '2025-01-15', 'VCT', 'Groups', 'International', 'manual')
 monitor.add_match_result(result)
@@ -141,12 +141,12 @@ The complete prediction pipeline runs in stages:
 ### Manual Pipeline Execution
 ```bash
 # Run complete pipeline
-python3 production_deployment.py --pipeline
+python3 src/production_deployment.py --pipeline
 
 # Run individual stages
-python3 production_deployment.py --data-only
-python3 production_deployment.py --predictions-only  
-python3 production_deployment.py --monitor-only
+python3 src/production_deployment.py --data-only
+python3 src/production_deployment.py --predictions-only  
+python3 src/production_deployment.py --monitor-only
 ```
 
 ## ⏰ Automated Scheduling
@@ -154,7 +154,7 @@ python3 production_deployment.py --monitor-only
 ### Option 1: Cron Jobs (Recommended)
 ```bash
 # Generate cron setup
-python3 production_deployment.py --setup-cron
+python3 src/production_deployment.py --setup-cron
 
 # Follow the instructions to add to crontab
 crontab -e
@@ -162,7 +162,7 @@ crontab -e
 
 ### Option 2: Python Scheduler
 ```python
-from automated_data_updater import AutomatedDataUpdater
+from src.automated_data_updater import AutomatedDataUpdater
 
 updater = AutomatedDataUpdater()
 updater.setup_schedule()
@@ -179,8 +179,8 @@ After=network.target
 [Service]
 Type=simple
 User=your-username
-WorkingDirectory=/Users/jolauwer/Documents/valorant-vct-predictor-2025
-ExecStart=/usr/bin/python3 automated_data_updater.py
+WorkingDirectory=/Users/jolauwer/Documents/VCT-Match-Predictor
+ExecStart=/usr/bin/python3 src/automated_data_updater.py
 Restart=always
 
 [Install]
@@ -190,7 +190,7 @@ WantedBy=multi-user.target
 ## 📁 Directory Structure
 
 ```
-valorant-vct-predictor-2025/
+VCT-Match-Predictor/
 ├── data/                          # Data storage
 │   ├── live_predictions.json      # Current predictions
 │   ├── performance_monitor.db     # Performance tracking
@@ -202,10 +202,10 @@ valorant-vct-predictor-2025/
 │   └── production_YYYYMMDD.log    # Main system logs
 ├── models/                        # ML models
 │   └── vct_model.joblib           # Trained prediction model
-├── enhanced_rib_scraper.py        # Data collection
-├── automated_data_updater.py      # Scheduled updates
-├── performance_monitor.py         # Accuracy tracking
-├── production_deployment.py       # System orchestration
+├── src/data_collection/rib_scraper.py        # Data collection
+├── src/automated_data_updater.py      # Scheduled updates
+├── src/performance_monitor.py         # Accuracy tracking
+├── src/production_deployment.py       # System orchestration
 └── PRODUCTION_SETUP_GUIDE.md      # This guide
 ```
 
@@ -244,7 +244,7 @@ valorant-vct-predictor-2025/
 ### Daily Checks
 ```bash
 # System health
-python3 production_deployment.py --status
+python3 src/production_deployment.py --status
 
 # Recent performance 
 python3 -c "

@@ -28,9 +28,9 @@ The Performance Monitor tracks real-world prediction accuracy and provides detai
 
 ## Usage Integration
 
-### 1. Adding Predictions (from live_predictor.py)
+### 1. Adding Predictions (from main prediction system)
 ```python
-from performance_monitor import PerformanceMonitor
+from src.performance_monitor import PerformanceMonitor
 
 monitor = PerformanceMonitor()
 
@@ -52,7 +52,7 @@ monitor.add_prediction_record(prediction_data)
 
 ### 2. Adding Match Results
 ```python
-from performance_monitor import MatchResult
+from src.performance_monitor import MatchResult
 
 # When match results are available
 result = MatchResult(
@@ -139,16 +139,16 @@ accuracy_thresholds = {
 
 ## Files Overview
 
-- `performance_monitor.py`: Main monitoring class
+- `src/performance_monitor.py`: Main monitoring class
 - `data/performance_monitor.db`: SQLite database
 - `logs/performance_monitor_YYYYMMDD.log`: Daily logs
 
 ## Integration with Existing Systems
 
 The monitor integrates seamlessly with:
-- `live_predictor.py`: Automatic prediction recording
-- `enhanced_rib_scraper.py`: Match result collection 
-- `vlr_scraper.py`: Alternative result source
+- `main_gui.py`: Automatic prediction recording
+- `src/data_collection/rib_scraper.py`: Match result collection 
+- `src/data_collection/vlr_scraper.py`: Alternative result source
 - Existing data pipeline and model evaluation
 
 This system provides comprehensive real-world performance tracking to ensure your VCT prediction model maintains expected accuracy in production.

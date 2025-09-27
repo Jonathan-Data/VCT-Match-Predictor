@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """
 VCT Predictor - GUI Launcher
 Simple launcher for the main VCT prediction system GUI
@@ -8,16 +8,16 @@ import sys
 import os
 from pathlib import Path
 
-# Add current directory to path
+
 sys.path.append(str(Path(__file__).parent))
 
 try:
     from vct_gui import main
-    
+
     if __name__ == "__main__":
         print("Starting VCT Prediction System GUI...")
         main()
-        
+
 except ImportError as e:
     print(f"Error: Required modules not found: {e}")
     print("\nPlease install required dependencies:")
