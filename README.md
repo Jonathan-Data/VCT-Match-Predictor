@@ -43,3 +43,15 @@ The VCT Match Predictor analyzes competitive data—including team win rates, re
 ```bash
 git clone [https://github.com/Jonathan-Data/VCT-Match-Predictor.git](https://github.com/Jonathan-Data/VCT-Match-Predictor.git)
 cd VCT-Match-Predictor
+
+cd server
+
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install required Python packages
+pip install -r requirements.txt
+
+# Start the Flask server
+python app.py
